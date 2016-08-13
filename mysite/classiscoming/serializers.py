@@ -1,15 +1,39 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Aula, Disciplina
+from .models import Curso, Evento, TipoEvento, Instituicao, TipoUsuario, Usuario, UsuarioEvento 
 
-
-class DisciplinaSerializer(serializers.HyperlinkedModelSerializer):
+class InstituicaoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Disciplina
-        fields = ('id','nome', 'created_date', 'update_date')
+        model = Instituicao
+        fields = ('id','nome')
 
-class AulaSerializer(serializers.HyperlinkedModelSerializer):
+class CursoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Aula
-        fields = ('id', 'nome', 'disciplina', 'aula_date', 'update_date', 'execucao_date')
+        model = Curso
+        fields = ('id','nome')
+
+class TipoEventoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TipoEvento
+        fields = ('id', 'nome', 'descricao')
+
+class EventoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Evento
+        fields = ('id', 'nome', 'tipoEvento', 'instituicao', 'inicio_date','fim_date')
+
+class TipoUsuarioSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TipoUsuario
+        fields = ('id', 'nome', 'descricao')
+
+class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ('id', 'nome', 'tipoUsuario', 'email')
+
+class UsuarioEventoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UsuarioEvento
+        fields = ('id', 'evento', 'usuario')
  

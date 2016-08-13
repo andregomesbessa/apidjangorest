@@ -9,6 +9,12 @@ class Instituicao(models.Model):
     cidade = models.CharField(max_length=300)
     estado = models.CharField(max_length=300)
     pais = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.nome
+
+class Curso(models.Model):
+    nome = models.CharField(max_length=300)
     created_date = models.DateTimeField(
             default=timezone.now)
     update_date = models.DateTimeField(
@@ -17,8 +23,8 @@ class Instituicao(models.Model):
     def __str__(self):
         return self.nome
 
-class Curso(models.Model):
-    nome = models.CharField(max_length=300)
+class InstituicaoCurso(models.Model):
+    curso = models.ForeignKey('Curso')
     instituicao = models.ForeignKey('Instituicao')
     created_date = models.DateTimeField(
             default=timezone.now)
@@ -26,11 +32,11 @@ class Curso(models.Model):
             default=timezone.now)
 
     def __str__(self):
-        return self.nome
+        return self.instituicao.sigla + " - " + self.curso.nome
 
-class Disciplina(models.Model):
+class TipoEvento(models.Model):
     nome = models.CharField(max_length=300)
-    curso = models.ForeignKey('Curso')
+    descricao = models.CharField(max_length=300)
     created_date = models.DateTimeField(
             default=timezone.now)
     update_date = models.DateTimeField(
@@ -39,25 +45,49 @@ class Disciplina(models.Model):
     def __str__(self):
         return self.nome
 
-class Aula(models.Model):
+class Evento(models.Model):
     nome = models.CharField(max_length=300)
-    disciplina = models.ForeignKey('Disciplina')
-    aula_date = models.DateTimeField(
+    tipoEvento = models.ForeignKey('TipoEvento')
+    instituicao = models.ForeignKey('Instituicao')
+    inicio_date = models.DateTimeField(
+            default=timezone.now)
+    fim_date = models.DateTimeField(
+            default=timezone.now)
+    created_date = models.DateTimeField(
             default=timezone.now)
     update_date = models.DateTimeField(
             default=timezone.now)
-    execucao_date = models.DateTimeField(
-            blank=True, null=True)
-
-    def publish(self):
-        self.execucao_date = timezone.now()
-        self.save()
 
     def __str__(self):
         return self.nome
 
-class Perfil(models.Model):
+class CursoEvento(models.Model):
+    evento = models.ForeignKey('Evento')
+    curso = models.ForeignKey('Curso')
+    created_date = models.DateTimeField(
+            default=timezone.now)
+    update_date = models.DateTimeField(
+            default=timezone.now)
+
+    def __str__(self):
+        return self.curso.nome + " - " + self.evento.nome
+
+class OcorrenciaEvento(models.Model):
+    evento = models.ForeignKey('Evento')
     nome = models.CharField(max_length=300)
+    ocorrencia_inicio_date = models.DateTimeField(
+            default=timezone.now)
+    ocorrencia_fim_date = models.DateTimeField(
+            default=timezone.now)
+    update_date = models.DateTimeField(
+            default=timezone.now)
+
+    def __str__(self):
+        return self.nome
+
+class TipoUsuario(models.Model):
+    nome = models.CharField(max_length=300)
+    descricao = models.CharField(max_length=300)
     created_date = models.DateTimeField(
             default=timezone.now)
     update_date = models.DateTimeField(
@@ -67,11 +97,44 @@ class Perfil(models.Model):
         return self.nome
 
 class Usuario(models.Model):
+    usuario = models.ForeignKey('auth.User')
+    tipoUsuario = models.ForeignKey('TipoUsuario')
     nome = models.CharField(max_length=300)
     email = models.CharField(max_length=300)
     telefone = models.CharField(max_length=300)
-    perfil = models.ForeignKey('Perfil')
+    created_date = models.DateTimeField(
+            default=timezone.now)
+    update_date = models.DateTimeField(
+            default=timezone.now)
+
+    def __str__(self):
+        return self.nome
+
+class UsuarioInstituicao(models.Model):
+    usuario = models.ForeignKey('Usuario')
     instituicao = models.ForeignKey('Instituicao')
+    created_date = models.DateTimeField(
+            default=timezone.now)
+    update_date = models.DateTimeField(
+            default=timezone.now)
+
+    def __str__(self):
+        return self.instituicao.sigla + " - " + self.usuario.nome 
+
+class UsuarioEvento(models.Model):
+    evento = models.ForeignKey('Evento')
+    usuario = models.ForeignKey('Usuario')
+    created_date = models.DateTimeField(
+            default=timezone.now)
+    update_date = models.DateTimeField(
+            default=timezone.now)
+
+    def __str__(self):
+        return self.evento.nome + " - " + self.usuario.nome
+
+class FaltaOcorrenciaEvento(models.Model):
+    ocorrenciaEvento = models.ForeignKey('OcorrenciaEvento')
+    usuario = models.ForeignKey('Usuario')
     created_date = models.DateTimeField(
             default=timezone.now)
     update_date = models.DateTimeField(

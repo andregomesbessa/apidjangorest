@@ -19,12 +19,21 @@ from django.contrib import admin
 from rest_framework import routers
 from classiscoming import views
 
+from classiscoming.views import obter_eventos_usuario
+from classiscoming.views import obter_participantes_evento
+
 router = routers.DefaultRouter(schema_title='Pastebin API')
-router.register(r'aulas', views.AulaViewSet)
-router.register(r'disciplinas', views.DisciplinaViewSet)
+router.register(r'instituicao', views.InstituicaoViewSet)
+router.register(r'curso', views.CursoViewSet)
+router.register(r'tipoevento', views.TipoEventoViewSet)
+router.register(r'evento', views.EventoViewSet)
+router.register(r'tipousuario', views.TipoUsuarioViewSet)
+router.register(r'usuario', views.UsuarioViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^eventosusuario/(?P<usuario>[0-9]+)$', obter_eventos_usuario),
+    url(r'^participantesevento/(?P<evento>[0-9]+)$', obter_participantes_evento),
 ]
