@@ -32,7 +32,9 @@ class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
         model = Usuario
         fields = ('id', 'nome', 'tipoUsuario', 'email')
 
-class UsuarioEventoSerializer(serializers.ModelSerializer):
+class UsuarioEventoSerializer(serializers.HyperlinkedModelSerializer):
+    usuario = UsuarioSerializer(many=False, read_only=True)
+    evento = EventoSerializer(many=False, read_only=True)
     class Meta:
         model = UsuarioEvento
         fields = ('id', 'evento', 'usuario')
