@@ -37,5 +37,10 @@ class UsuarioEventoSerializer(serializers.HyperlinkedModelSerializer):
     evento = EventoSerializer(many=False, read_only=True)
     class Meta:
         model = UsuarioEvento
-        fields = ('id', 'evento', 'usuario')
- 
+        fields = ('id','evento','usuario')
+
+class ParticipantesEventoSerializer(serializers.HyperlinkedModelSerializer):
+    usuario = UsuarioSerializer(many=False, read_only=True)
+    class Meta:
+        model = UsuarioEvento
+        fields = ('usuario',)

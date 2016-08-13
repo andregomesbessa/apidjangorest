@@ -9,7 +9,7 @@ from django.utils import timezone
 from .models import Instituicao, Curso, InstituicaoCurso, TipoEvento, Evento, CursoEvento, OcorrenciaEvento, TipoUsuario, Usuario, UsuarioInstituicao, UsuarioEvento, FaltaOcorrenciaEvento
 
 from django.contrib.auth.models import User, Group
-from classiscoming.serializers import InstituicaoSerializer, CursoSerializer, TipoEventoSerializer, EventoSerializer, TipoUsuarioSerializer, UsuarioEventoSerializer, UsuarioSerializer 
+from classiscoming.serializers import InstituicaoSerializer, CursoSerializer, TipoEventoSerializer, EventoSerializer, TipoUsuarioSerializer, UsuarioEventoSerializer, UsuarioSerializer, ParticipantesEventoSerializer 
 
 # Create your views here.
 class InstituicaoViewSet(viewsets.ModelViewSet):
@@ -84,5 +84,5 @@ def obter_participantes_evento(request, evento):
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = UsuarioEventoSerializer(usuarioevento, context={'request': request}, many=True)        
+        serializer = ParticipantesEventoSerializer(usuarioevento, context={'request': request}, many=True)        
         return Response(serializer.data)
