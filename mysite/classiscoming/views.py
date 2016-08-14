@@ -9,7 +9,7 @@ from django.utils import timezone
 from .models import Instituicao, Curso, InstituicaoCurso, TipoEvento, Evento, CursoEvento, OcorrenciaEvento, TipoUsuario, Usuario, UsuarioInstituicao, UsuarioEvento, FaltaOcorrenciaEvento
 
 from django.contrib.auth.models import User, Group
-from classiscoming.serializers import InstituicaoSerializer, CursoSerializer, TipoEventoSerializer, EventoSerializer, TipoUsuarioSerializer, UsuarioEventoSerializer, UsuarioSerializer, ParticipantesEventoSerializer 
+from classiscoming.serializers import InstituicaoSerializer, CursoSerializer, TipoEventoSerializer, EventoSerializer, TipoUsuarioSerializer, UsuarioEventoSerializer, UsuarioSerializer, ParticipantesEventoSerializer, OcorrenciaEventoSerializer, EventosUsuarioSerializer 
 
 # Create your views here.
 class InstituicaoViewSet(viewsets.ModelViewSet):
@@ -62,27 +62,45 @@ class UsuarioEventoViewSet(viewsets.ModelViewSet):
     queryset = UsuarioEvento.objects.all()
     serializer_class = UsuarioEventoSerializer
 
-@api_view(['GET'])
-def obter_eventos_usuario(request, usuario):
-    try:
-        result = UsuarioEvento.objects.filter(usuario=usuario)
-        usuarioevento = list(result)
-    except UsuarioEvento.DoesNotExist:
-        return HttpResponse(status=404)
+    def obter_participantes_evento(self, request, evento):
+        try:
+            result = UsuarioEvento.objects.filter(evento=evento)
+            usuarioevento = list(result)
 
-    if request.method == 'GET':
-        serializer = UsuarioEventoSerializer(usuarioevento, context={'request': request}, many=True)        
-        return Response(serializer.data)
+        except UsuarioEvento.DoesNotExist:
+            return HttpResponse(status=404)
 
-@api_view(['GET'])
-def obter_participantes_evento(request, evento):
-    try:
-        result = UsuarioEvento.objects.filter(evento=evento)
-        usuarioevento = list(result)
+        if request.method == 'GET':
+            serializer = ParticipantesEventoSerializer(usuarioevento, context={'request': request}, many=True)        
+            return Response(serializer.data)
 
-    except UsuarioEvento.DoesNotExist:
-        return HttpResponse(status=404)
+    def obter_eventos_usuario(self, request):
+        try:
+            usuario = Usuario.objects.get(usuario=self.request.user)
+            result = UsuarioEvento.objects.filter(usuario=usuario)
+            usuarioevento = list(result)
+        except UsuarioEvento.DoesNotExist:
+            return HttpResponse(status=404)
 
-    if request.method == 'GET':
-        serializer = ParticipantesEventoSerializer(usuarioevento, context={'request': request}, many=True)        
-        return Response(serializer.data)
+        if request.method == 'GET':
+            serializer = EventosUsuarioSerializer(usuarioevento, context={'request': request}, many=True)        
+            return Response(serializer.data)
+
+class OcorrenciaEventoViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = OcorrenciaEvento.objects.all()
+    serializer_class = OcorrenciaEventoSerializer
+
+    def obter_ocorrencias_evento(self, request, evento):
+        try:
+            result = OcorrenciaEvento.objects.filter(evento=evento)
+            usuarioevento = list(result)
+
+        except OcorrenciaEvento.DoesNotExist:
+            return HttpResponse(status=404)
+
+        if request.method == 'GET':
+            serializer = OcorrenciaEventoSerializer(usuarioevento, context={'request': request}, many=True)        
+            return Response(serializer.data)
