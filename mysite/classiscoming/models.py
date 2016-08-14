@@ -133,7 +133,7 @@ class UsuarioEvento(models.Model):
         return self.evento.nome + " - " + self.usuario.nome
 
 class FaltaOcorrenciaEvento(models.Model):
-    ocorrenciaEvento = models.ForeignKey('OcorrenciaEvento')
+    ocorrenciaevento = models.ForeignKey('OcorrenciaEvento')
     usuario = models.ForeignKey('Usuario')
     created_date = models.DateTimeField(
             default=timezone.now)
@@ -141,4 +141,4 @@ class FaltaOcorrenciaEvento(models.Model):
             default=timezone.now)
 
     def __str__(self):
-        return self.nome
+        return self.usuario.nome

@@ -57,10 +57,9 @@ class OcorrenciaEventoSerializer(serializers.HyperlinkedModelSerializer):
         model = OcorrenciaEvento
         fields = ('id', 'nome', 'ocorrencia_inicio_date', 'ocorrencia_fim_date')
 
-class FaltaOcorrenciaEventoSerializer(serializers.HyperlinkedModelSerializer):
-    
+class FaltaOcorrenciaEventoSerializer(serializers.ModelSerializer):
     class Meta:
         model = FaltaOcorrenciaEvento
-        fields = ('id', 'ocorrenciaEvento', 'usuario')
+        fields = ('id', 'ocorrenciaevento', 'usuario')
 
         

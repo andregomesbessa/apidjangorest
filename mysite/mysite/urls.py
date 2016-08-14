@@ -26,6 +26,7 @@ router.register(r'tipoevento', views.TipoEventoViewSet)
 router.register(r'evento', views.EventoViewSet)
 router.register(r'tipousuario', views.TipoUsuarioViewSet)
 router.register(r'usuario', views.UsuarioViewSet)
+router.register(r'faltaocorrenciaevento', views.FaltaOcorrenciaEventoViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
