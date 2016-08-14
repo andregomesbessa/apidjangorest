@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Curso, Evento, TipoEvento, Instituicao, TipoUsuario, Usuario, UsuarioEvento, OcorrenciaEvento 
+from .models import Curso, Evento, TipoEvento, Instituicao, TipoUsuario, Usuario, UsuarioEvento, OcorrenciaEvento, FaltaOcorrenciaEvento 
 
 class InstituicaoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -56,3 +56,11 @@ class OcorrenciaEventoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = OcorrenciaEvento
         fields = ('id', 'nome', 'ocorrencia_inicio_date', 'ocorrencia_fim_date')
+
+class FaltaOcorrenciaEventoSerializer(serializers.HyperlinkedModelSerializer):
+    
+    class Meta:
+        model = FaltaOcorrenciaEvento
+        fields = ('id', 'ocorrenciaEvento', 'usuario')
+
+        
