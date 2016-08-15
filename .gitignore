@@ -3,3 +3,6 @@ mysite/classiscoming/__pycache__/
 mysite/mysite/__pycache__/
 projetoenv
 *.pyc
+db.sqlite3
+.DS_Store
+__pycache__
